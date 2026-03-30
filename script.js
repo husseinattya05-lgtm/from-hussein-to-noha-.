@@ -6,14 +6,14 @@ const monthText = document.getElementById("monthText");
 const text = document.getElementById("text");
 const startBtn = document.getElementById("startBtn");
 
-let images = [
-  "1-4.jpg",
-  "first-time.jpg",
-  "2-4.jpg",
-  "1-5.jpg",
-  "2-5.jpg",
-  "1-6.jpg"
-];
+let images = [];
+const months = [4,5,6,7,8,9,10,11,12,1,2,3];
+
+months.forEach(month => {
+  for(let i = 1; i <= 20; i++){
+    images.push(`${i}-${month}.jpg`);
+  }
+});
 
 let index = 0;
 
@@ -32,84 +32,110 @@ const monthNames = {
   3:"March 2025"
 };
 
-function showImage(){
+function getSpeed(month){
+  month = parseInt(month);
+  if(month >= 4 && month <= 8){
+    return 3500;
+  }
+  return 200;
+}
 
-  try {
+function showEnding(){
 
-    if(index >= images.length) return;
+  image.src = "final.jpg";
+  image.style.width = "400px";
+  image.style.opacity = 1;
 
-    const path = images[index];
+  monthText.innerText = "";
 
-    if(!path){
-      index++;
-      setTimeout(showImage, 1000);
-      return;
-    }
+  const lines = [
+    "NOHA… it was all worth it 🤍",
+    "and I’d do it all over again 🤍",
+    "still feels like it all just started…",
+    "untitled story is not begun yet"
+  ];
 
-    image.src = path;
+  let i = 0;
 
-    image.style.opacity = 0;
-    image.style.transform = "translateX(80px) scale(0.98)";
+  function showLine(){
+
+    if(i >= lines.length) return;
+
+    text.innerText = lines[i];
+    text.style.opacity = 1;
 
     setTimeout(() => {
+      text.style.opacity = 0;
 
+      setTimeout(() => {
+        i++;
+        showLine();
+      }, 800);
+
+    }, 3000);
+  }
+
+  setTimeout(showLine, 1000);
+}
+
+function showImage(){
+
+  if(index >= images.length){
+    showEnding();
+    return;
+  }
+
+  const path = images[index];
+
+  const temp = new Image();
+
+  temp.onload = () => {
+
+    image.src = path;
+    image.style.width = "300px";
+    image.style.opacity = 0;
+
+    setTimeout(() => {
       image.style.opacity = 1;
-      image.style.transform = "translateX(0) scale(1)";
 
-      if(path.includes("first-time")){
-        monthText.innerText = "💫 Special Moment";
-        text.innerText = "first time 🤍";
-      } else {
+      const file = path.split(".")[0];
+      const month = file.split("-")[1];
 
-        const file = path.split(".")[0];
-        const parts = file.split("-");
-
-        if(parts.length >= 2){
-          const monthNum = parts[1];
-          monthText.innerText = monthNames[monthNum] || "Unknown Month";
-          text.innerText = "";
-        } else {
-          monthText.innerText = "Unknown";
-        }
-
-      }
+      monthText.innerText = monthNames[month] || "";
+      text.style.opacity = 0;
 
       notif.currentTime = 0;
       notif.play().catch(()=>{});
 
-    }, 200);
+    }, 100);
+
+    const file = path.split(".")[0];
+    const month = file.split("-")[1];
 
     index++;
+    setTimeout(showImage, getSpeed(month));
+  };
 
-    if(index < images.length){
-      setTimeout(showImage, 4000);
-    }
-
-  } catch (error) {
-    console.log("Error:", error);
+  temp.onerror = () => {
     index++;
-    setTimeout(showImage, 1000);
-  }
+    showImage();
+  };
 
+  temp.src = path;
 }
 
 function start(){
 
+  // 🔥 تشغيل الفيديو
   video.muted = true;
-
-  const playPromise = video.play();
-  if (playPromise !== undefined) {
-    playPromise.catch(err => {
-      console.log("Video error:", err);
-    });
-  }
+  video.play().catch(()=>{});
 
   music.play().catch(()=>{});
 
   showImage();
 }
 
-startBtn.addEventListener("click", () => {
+startBtn.onclick = () => {
   startBtn.style.display = "none";
   start();
-});
+};

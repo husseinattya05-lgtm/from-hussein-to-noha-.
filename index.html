@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Memories 🤍</title>
+
+<style>
+body {
+  margin: 0;
+  background: black;
+  overflow: hidden;
+}
+
+video {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+
+#imageLayer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#image {
+  width: 280px;
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+#text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 34px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+#monthText {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 22px;
+  opacity: 0.8;
+}
+</style>
+
+</head>
+<body>
+
+<video id="video" autoplay muted>
+  <source src="video.mp4" type="video/mp4">
+</video>
+
+<div id="monthText"></div>
+
+<div id="imageLayer">
+  <img id="image" src="">
+</div>
+
+<div id="text"></div>
+
+<audio id="music" src="music.mp3"></audio>
+<audio id="notif" src="notif.mp3"></audio>
+
+<script>
+
+const video = document.getElementById("video");
+const image = document.getElementById("image");
+const text = document.getElementById("text");
+const music = document.getElementById("music");
+const notif = document.getElementById("notif");
+const monthText = document.getElementById("monthText");
+
+let images = [
+  "images/1-4.jpg",
+  "images/2-4.jpg",
+  "images/1-5.jpg",
+  "images/2-5.jpg",
+  "images/1-6.jpg",
+  "images/2-6.jpg"
+];
+
+let index = 0;
+
+// ترتيب تلقائي
+const monthOrder = [4,5,6,7,8,9,10,11,12,1,2,3];
+
+function getMonthIndex(m){
+  return monthOrder.indexOf(m);
+}
+
+images.sort((a,b)=>{
+
+  const getData = (path)=>{
+    const file = path.split("/").pop().split(".")[0];
+    const [imgNum, monthNum] = file.split("-").map(Number);
+    return {imgNum, monthNum};
+  };
+
+  const A = getData(a);
+  const B = getData(b);
+
+  let diff = getMonthIndex(A.monthNum) - getMonthIndex(B.monthNum);
+  if(diff !== 0) return diff;
+
+  return A.imgNum - B.imgNum;
+});
+
+const monthNames = {
+  4:"April 2025",
+  5:"May 2025",
+  6:"June 2025",
+  7:"July 2025",
+  8:"August 2025",
+  9:"September 2025",
+  10:"October 2025",
+  11:"November 2025",
+  12:"December 2025",
+  1:"January 2025",
+  2:"February 2025",
+  3:"March 2025"
+};
+
+function showImage(){
+
+  const path = images[index];
+  image.src = path;
+  image.style.opacity = 1;
+
+  const file = path.split("/").pop().split(".")[0];
+  const monthNum = file.split("-")[1];
+
+  monthText.innerText = monthNames[monthNum];
+
+  index++;
+
+  if(index >= images.length){
+    index = images.length - 1;
+  }
+}
+
+function start(){
+
+  music.play();
+
+  setInterval(()=>{
+    if(video.currentTime / video.duration < 0.95){
+      showImage();
+    }
+  },150);
+
+}
+
+document.body.addEventListener("click", start, {once:true});
+
+</script>
+
+</body>
+</html>

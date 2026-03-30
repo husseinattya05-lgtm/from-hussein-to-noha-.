@@ -47,7 +47,7 @@ function getSpeed(month){
 function showEnding(){
 
   image.src = "./final.jpg";
-  image.style.width = "420px";
+  image.style.width = "500px";
   image.style.opacity = 1;
 
   monthText.innerText = "";
@@ -69,17 +69,18 @@ function showEnding(){
     text.style.opacity = 1;
 
     setTimeout(() => {
+
       text.style.opacity = 0;
 
       setTimeout(() => {
         i++;
         showLine();
-      }, 800);
+      }, 1000);
 
-    }, 3000);
+    }, 3500);
   }
 
-  setTimeout(showLine, 1000);
+  setTimeout(showLine, 1500);
 }
 
 /* عرض الصور */
@@ -105,7 +106,6 @@ function showImage(){
       const month = file.split("-")[1];
 
       monthText.innerText = monthNames[month] || "";
-      text.style.opacity = 0;
 
       notif.currentTime = 0;
       notif.play().catch(()=>{});
@@ -133,18 +133,8 @@ function start(){
   video.muted = true;
   video.loop = true;
   video.playsInline = true;
-  video.preload = "auto";
 
-  video.load();
-
-  const playPromise = video.play();
-
-  if (playPromise !== undefined) {
-    playPromise.catch(err => {
-      console.log("Video error:", err);
-    });
-  }
-
+  video.play().catch(()=>{});
   music.play().catch(()=>{});
 
   showImage();

@@ -1,0 +1,78 @@
+body {
+  margin: 0;
+  background: black;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+/* الفيديو في الخلفية */
+video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* طبقة الصور */
+#imageLayer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+/* الصورة */
+#image {
+  width: 280px;
+  max-width: 80%;
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* نص الشهر */
+#monthText {
+  position: fixed;
+  top: 40px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 22px;
+  z-index: 2;
+  opacity: 0.9;
+}
+
+/* زر البداية */
+button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 15px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 999;
+  background: white;
+  color: black;
+}
+
+/* تحسين بسيط للموبايل */
+@media (max-width: 600px) {
+  #image {
+    width: 220px;
+  }
+
+  #monthText {
+    font-size: 18px;
+  }
+}

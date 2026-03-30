@@ -5,25 +5,35 @@
 <title>Memories </title>
 
 <style>
+
 body {
   margin: 0;
   background: black;
   overflow: hidden;
 }
 
+/*   */
 video {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   object-fit: cover;
+  z-index: -1;
 }
 
+/*   */
 #imageLayer {
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 }
 
 #image {
@@ -33,15 +43,18 @@ video {
   transition: opacity 0.5s;
 }
 
+/*  */
 #monthText {
-  position: absolute;
+  position: fixed;
   top: 40px;
   width: 100%;
   text-align: center;
   color: white;
   font-size: 22px;
+  z-index: 2;
 }
 
+/*   */
 button {
   position:absolute;
   top:50%;
@@ -51,23 +64,27 @@ button {
   font-size:18px;
   z-index:999;
 }
-</style>
 
+</style>
 </head>
+
 <body>
 
 <button id="startBtn">Start</button>
 
-<video id="video" muted>
+<!--  -->
+<video id="video" autoplay muted loop>
   <source src="video.mp4" type="video/mp4">
 </video>
 
-<div id="monthText"></div>
-
+<!--  -->
 <div id="imageLayer">
   <img id="image" src="">
 </div>
 
+<div id="monthText"></div>
+
+<!--  -->
 <audio id="music" src="music.mp3"></audio>
 <audio id="notif" src="notif.mp3"></audio>
 
@@ -120,7 +137,7 @@ function showImage(){
 
   monthText.innerText = monthNames[monthNum];
 
-  //  notification
+  //   notification
   notif.currentTime = 0;
   notif.play();
 
@@ -131,6 +148,9 @@ function start(){
 
   video.play();
   music.play();
+
+  //   
+  showImage();
 
   setInterval(()=>{
     if(video.currentTime / video.duration < 0.95){

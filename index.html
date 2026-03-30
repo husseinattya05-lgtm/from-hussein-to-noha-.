@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Memories 🤍</title>
+<title>Memories </title>
 
 <style>
 body {
@@ -30,19 +30,7 @@ video {
   width: 280px;
   border-radius: 12px;
   opacity: 0;
-  transition: opacity 0.4s, transform 0.4s;
-}
-
-#text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  font-size: 34px;
-  text-align: center;
-  opacity: 0;
-  transition: opacity 1s;
+  transition: opacity 0.5s;
 }
 
 #monthText {
@@ -52,14 +40,25 @@ video {
   text-align: center;
   color: white;
   font-size: 22px;
-  opacity: 0.8;
+}
+
+button {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  padding:15px 25px;
+  font-size:18px;
+  z-index:999;
 }
 </style>
 
 </head>
 <body>
 
-<video id="video" autoplay muted>
+<button id="startBtn">Start</button>
+
+<video id="video" muted>
   <source src="video.mp4" type="video/mp4">
 </video>
 
@@ -69,8 +68,6 @@ video {
   <img id="image" src="">
 </div>
 
-<div id="text"></div>
-
 <audio id="music" src="music.mp3"></audio>
 <audio id="notif" src="notif.mp3"></audio>
 
@@ -78,45 +75,21 @@ video {
 
 const video = document.getElementById("video");
 const image = document.getElementById("image");
-const text = document.getElementById("text");
 const music = document.getElementById("music");
 const notif = document.getElementById("notif");
 const monthText = document.getElementById("monthText");
+const startBtn = document.getElementById("startBtn");
 
 let images = [
-  "images/1-4.jpg",
-  "images/2-4.jpg",
-  "images/1-5.jpg",
-  "images/2-5.jpg",
-  "images/1-6.jpg",
-  "images/2-6.jpg"
+  "1-4.jpg",
+  "2-4.jpg",
+  "1-5.jpg",
+  "2-5.jpg",
+  "1-6.jpg",
+  "2-6.jpg"
 ];
 
 let index = 0;
-
-// ترتيب تلقائي
-const monthOrder = [4,5,6,7,8,9,10,11,12,1,2,3];
-
-function getMonthIndex(m){
-  return monthOrder.indexOf(m);
-}
-
-images.sort((a,b)=>{
-
-  const getData = (path)=>{
-    const file = path.split("/").pop().split(".")[0];
-    const [imgNum, monthNum] = file.split("-").map(Number);
-    return {imgNum, monthNum};
-  };
-
-  const A = getData(a);
-  const B = getData(b);
-
-  let diff = getMonthIndex(A.monthNum) - getMonthIndex(B.monthNum);
-  if(diff !== 0) return diff;
-
-  return A.imgNum - B.imgNum;
-});
 
 const monthNames = {
   4:"April 2025",
@@ -135,24 +108,28 @@ const monthNames = {
 
 function showImage(){
 
+  if(index >= images.length) return;
+
   const path = images[index];
+
   image.src = path;
   image.style.opacity = 1;
 
-  const file = path.split("/").pop().split(".")[0];
+  const file = path.split(".")[0];
   const monthNum = file.split("-")[1];
 
   monthText.innerText = monthNames[monthNum];
 
-  index++;
+  //  notification
+  notif.currentTime = 0;
+  notif.play();
 
-  if(index >= images.length){
-    index = images.length - 1;
-  }
+  index++;
 }
 
 function start(){
 
+  video.play();
   music.play();
 
   setInterval(()=>{
@@ -163,7 +140,10 @@ function start(){
 
 }
 
-document.body.addEventListener("click", start, {once:true});
+startBtn.addEventListener("click", () => {
+  startBtn.style.display = "none";
+  start();
+});
 
 </script>
 

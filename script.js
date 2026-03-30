@@ -6,7 +6,7 @@ const monthText = document.getElementById("monthText");
 const text = document.getElementById("text");
 const startBtn = document.getElementById("startBtn");
 
-// 🔥 توليد الصور تلقائي
+/* 🔥 توليد الصور */
 let images = [];
 const months = [4,5,6,7,8,9,10,11,12,1,2,3];
 
@@ -18,6 +18,7 @@ months.forEach(month => {
 
 let index = 0;
 
+/* أسماء الشهور */
 const monthNames = {
   4:"April 2025",
   5:"May 2025",
@@ -33,7 +34,7 @@ const monthNames = {
   3:"March 2026"
 };
 
-// 🐢 بطيء → ⚡ سريع
+/* السرعة */
 function getSpeed(month){
   month = parseInt(month);
   if(month >= 4 && month <= 8){
@@ -42,7 +43,7 @@ function getSpeed(month){
   return 200;
 }
 
-// 🎬 النهاية
+/* النهاية */
 function showEnding(){
 
   image.src = "final.jpg";
@@ -81,7 +82,7 @@ function showEnding(){
   setTimeout(showLine, 1000);
 }
 
-// 🔥 أهم جزء (حل Vercel)
+/* عرض الصور */
 function showImage(){
 
   if(index >= images.length){
@@ -90,13 +91,11 @@ function showImage(){
   }
 
   const path = images[index];
-
   const temp = new Image();
 
   temp.onload = () => {
 
     image.src = path;
-    image.style.width = "300px";
     image.style.opacity = 0;
 
     setTimeout(() => {
@@ -111,7 +110,6 @@ function showImage(){
       notif.currentTime = 0;
       notif.play().catch(()=>{});
 
-      // 🔥 السرعة بعد تحميل الصورة
       const speed = getSpeed(month);
 
       index++;
@@ -121,7 +119,6 @@ function showImage(){
 
   };
 
-  // لو صورة مش موجودة
   temp.onerror = () => {
     index++;
     showImage();
@@ -130,13 +127,12 @@ function showImage(){
   temp.src = path;
 }
 
+/* تشغيل */
 function start(){
 
-  // 🎬 تشغيل الفيديو
   video.muted = true;
   video.play().catch(()=>{});
 
-  // 🎵 الموسيقى
   music.play().catch(()=>{});
 
   showImage();

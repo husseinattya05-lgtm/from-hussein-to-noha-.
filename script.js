@@ -6,6 +6,7 @@ const monthText = document.getElementById("monthText");
 const text = document.getElementById("text");
 const startBtn = document.getElementById("startBtn");
 
+// 🔥 توليد الصور تلقائي
 let images = [];
 const months = [4,5,6,7,8,9,10,11,12,1,2,3];
 
@@ -27,11 +28,12 @@ const monthNames = {
   10:"October 2025",
   11:"November 2025",
   12:"December 2025",
-  1:"January 2025",
-  2:"February 2025",
-  3:"March 2025"
+  1:"January 2026",
+  2:"February 2026",
+  3:"March 2026"
 };
 
+// 🐢 بطيء → ⚡ سريع
 function getSpeed(month){
   month = parseInt(month);
   if(month >= 4 && month <= 8){
@@ -40,10 +42,11 @@ function getSpeed(month){
   return 200;
 }
 
+// 🎬 النهاية
 function showEnding(){
 
   image.src = "final.jpg";
-  image.style.width = "400px";
+  image.style.width = "420px";
   image.style.opacity = 1;
 
   monthText.innerText = "";
@@ -78,6 +81,7 @@ function showEnding(){
   setTimeout(showLine, 1000);
 }
 
+// 🔥 أهم جزء (حل Vercel)
 function showImage(){
 
   if(index >= images.length){
@@ -107,15 +111,17 @@ function showImage(){
       notif.currentTime = 0;
       notif.play().catch(()=>{});
 
+      // 🔥 السرعة بعد تحميل الصورة
+      const speed = getSpeed(month);
+
+      index++;
+      setTimeout(showImage, speed);
+
     }, 100);
 
-    const file = path.split(".")[0];
-    const month = file.split("-")[1];
-
-    index++;
-    setTimeout(showImage, getSpeed(month));
   };
 
+  // لو صورة مش موجودة
   temp.onerror = () => {
     index++;
     showImage();
@@ -126,10 +132,11 @@ function showImage(){
 
 function start(){
 
-  // 🔥 تشغيل الفيديو
+  // 🎬 تشغيل الفيديو
   video.muted = true;
   video.play().catch(()=>{});
 
+  // 🎵 الموسيقى
   music.play().catch(()=>{});
 
   showImage();

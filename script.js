@@ -6,7 +6,7 @@ const monthText = document.getElementById("monthText");
 const text = document.getElementById("text");
 const startBtn = document.getElementById("startBtn");
 
-/* 🔥 توليد الصور */
+/* الصور */
 let images = [];
 const months = [4,5,6,7,8,9,10,11,12,1,2,3];
 
@@ -46,7 +46,7 @@ function getSpeed(month){
 /* النهاية */
 function showEnding(){
 
-  image.src = "final.jpg";
+  image.src = "./final.jpg";
   image.style.width = "420px";
   image.style.opacity = 1;
 
@@ -90,7 +90,7 @@ function showImage(){
     return;
   }
 
-  const path = images[index];
+  const path = "./" + images[index];
   const temp = new Image();
 
   temp.onload = () => {
@@ -101,7 +101,7 @@ function showImage(){
     setTimeout(() => {
       image.style.opacity = 1;
 
-      const file = path.split(".")[0];
+      const file = images[index].split(".")[0];
       const month = file.split("-")[1];
 
       monthText.innerText = monthNames[month] || "";
@@ -131,7 +131,19 @@ function showImage(){
 function start(){
 
   video.muted = true;
-  video.play().catch(()=>{});
+  video.loop = true;
+  video.playsInline = true;
+  video.preload = "auto";
+
+  video.load();
+
+  const playPromise = video.play();
+
+  if (playPromise !== undefined) {
+    playPromise.catch(err => {
+      console.log("Video error:", err);
+    });
+  }
 
   music.play().catch(()=>{});
 
